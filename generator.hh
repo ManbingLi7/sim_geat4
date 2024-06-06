@@ -5,6 +5,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
+#include "G4Proton.hh"
 
 class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {

@@ -4,8 +4,10 @@ MyPhysicsList::MyPhysicsList()
 {
 
   //Two interactions: Em(Electron magentic interaction)
-  RegisterPhysics (new G4EmStandardPhysics());
-  RegisterPhysics (new G4OpticalPhysics());
+  G4VPhysicsConstructor* emPhysics = new G4EmStandardPhysics();
+  RegisterPhysics (emPhysics);
+  G4VPhysicsConstructor* opticalPhysics = new G4OpticalPhysics();
+  RegisterPhysics (opticalPhysics);
  
 }
 
