@@ -34,10 +34,11 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
   Aerogel->SetMaterialPropertiesTable(mptAerogel);
   
   G4Material *worldMat = nist->FindOrBuildMaterial("G4_AIR");
+  
   //another G4MaterialPropertiesTable
   G4MaterialPropertiesTable *mptWorld = new G4MaterialPropertiesTable();
   mptWorld->AddProperty("RINDEX", energy, rindexWorld, 2);
-  
+  worldMat->SetMaterialPropertiesTable(mptWorld);
   
   //create a world, volume 
   //half of the legthen, default is mm, multiply with m, with G4SystemOfUnits
@@ -57,7 +58,31 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
   //define physical volume (daughter volume of the physWorld)
   G4VPhysicalVolume *physRadiator = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.25*m), logicRadiator, "physRadiator", logicWorld, false, 0, true);
   
+  //build sensitive detectors, photon sensors
+  G4Box *solidDetector = new G4Box("solidDetector", 0.005*m, 0.005*m, 0.01*m);
+  //create
 
+  logicDetector = new G4LogicalVolume(solidDetector, worldMat, "logicalDetector");
+
+  for (G4int i = 0; i < 100; i++)
+    {
+      for (G4int j = 0; j < 100; j++)
+	{
+	  G4VPhysicalVolume *physDetector = new G4PVPlacement(0, G4ThreeVector(-0.5*m+(i+0.5)*m/100, -0.5*m+(j+0.5)*m/100, 0.49*m), logicDetector, "physDetector", logicWorld, false, i+j*100, true);  
+	}
+    }
+      
+  
+  
+  
   return physWorld;
   
 }
+
+void MyDetectorConstruction::ConstructSDandField()
+{
+  MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
+  logicDetector->SetSensitiveDetector(sensDet);
+}
+
+
